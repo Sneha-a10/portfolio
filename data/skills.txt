@@ -1,0 +1,28 @@
+AI / ML & Data:
+- TensorFlow / Keras
+- Scikit-learn
+- Pandas / NumPy
+- OpenCV
+- Generative AI / LLMs
+- NLTK
+- MediaPipe
+
+Programming & CS Foundations:
+- Python
+- C
+- C++
+- Java
+- SQL
+- Data Structures
+- Algorithms
+- OOP
+
+Frameworks & Tools:
+- React / Next.js
+- Flask
+- Streamlit
+- Node.js
+
+Developer Workflow:
+- Git / GitHub
+- Docker

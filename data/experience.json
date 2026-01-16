@@ -1,0 +1,31 @@
+{
+    "education": {
+        "degree": "B.Tech CSE (Hons.)",
+        "university": "RV University",
+        "duration": "2023 - 2027",
+        "major": "Artificial Intelligence & Machine Learning",
+        "minor": "FinTech"
+    },
+    "experience": [
+        {
+            "role": "Software Developer",
+            "organization": "Dhee Center of AI and Computer Science",
+            "duration": "Aug 2024",
+            "highlights": [
+                "Analyzed 1,000+ student academic records to identify performance patterns and trends.",
+                "Tested multiple machine learning algorithms to determine optimal predictive performance.",
+                "Evaluated Decision Trees, Random Forests, and Linear models to identify best-performing approaches."
+            ]
+        },
+        {
+            "role": "Software Development Engineer",
+            "organization": "RV University",
+            "duration": "Jun 2025 - Aug 2025",
+            "highlights": [
+                "Worked on MeetingAI, a web platform to automate meeting documentation from audio and video inputs.",
+                "Built a full-stack system integrating AssemblyAI for speaker-diarized transcription and Google Gemini for automated summaries, key points, and action items.",
+                "Streamlined post-meeting workflows by delivering instant, structured insights, eliminating manual note-taking."
+            ]
+        }
+    ]
+}

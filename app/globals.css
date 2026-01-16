@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --background: #111111;
+  --foreground: #e5e7eb;
+
+  /* Business Card Theme Colors */
+  --ide-bg: #111111;
+  /* Main background */
+  --ide-sidebar: #0a0a0a;
+  /* Slightly darker for sidebar */
+  --ide-panel: #111111;
+  /* Panel matches bg */
+  --ide-text-primary: #e5e7eb;
+  --ide-text-secondary: #666666;
+
+  /* Syntax Highlighting based on image */
+  --syntax-key: #ff7b72;
+  /* Salmon/Pink for keys */
+  --syntax-string: #e6db74;
+  /* Cream/Yellow for strings (matches reference image) */
+  --syntax-string-legacy: #a5d6ff;
+  /* Fallback */
+
+  /* Adjusted to match the cream/yellow string color in the image more closely if possible, 
+     but standard dark themes often use green/yellow. 
+     Image check: Keys are pinkish-red. Strings/Values appear a beige/light yellow. Link is distinct.
+  */
+  --ide-accent: #ff7b72;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-mono: var(--font-jetbrains-mono);
+
+  --color-ide-bg: var(--ide-bg);
+  --color-ide-sidebar: var(--ide-sidebar);
+  --color-ide-panel: var(--ide-panel);
+  --color-ide-text-primary: var(--ide-text-primary);
+  --color-ide-text-secondary: var(--ide-text-secondary);
+  --color-ide-accent: var(--ide-accent);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-jetbrains-mono);
+  /* overflow: hidden; Removed to allow landing page scroll */
+}
+
+/* Aggressively Hide Scrollbars */
+::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+* {
+  -ms-overflow-style: none !important;
+  /* IE and Edge */
+  scrollbar-width: none !important;
+  /* Firefox */
+}
+
+/* Ensure no element accidentally shows it */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

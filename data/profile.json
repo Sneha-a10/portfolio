@@ -1,0 +1,27 @@
+{
+  "name": "Sneha Agarwal",
+  "role": "AI / ML Engineer in Training",
+  "education": "RV University",
+  "focus": [
+    {
+      "title": "AI & ML Systems",
+      "description": "Architecting end-to-end pipelines that transform raw data into production-grade predictive models."
+    },
+    {
+      "title": "Generative AI Applications",
+      "description": "Developing intelligent agents and RAG systems that solve complex, open-ended user problems."
+    },
+    {
+      "title": "Computer Vision & Multimodal",
+      "description": "Building perceiver systems that analyze video, image, and text for real-world understanding."
+    }
+  ],
+  "summary": "Computer Science undergraduate with hands-on experience building end-to-end ML pipelines and AI-powered applications using modern ML and LLM workflows.",
+  "email": "snehaagarwal23115@gmail.com",
+  "avatar": "/profile-pic.jpg",
+  "links": {
+    "github": "https://github.com/Sneha-a10",
+    "linkedin": "https://linkedin.com/in/sneha-agarwal",
+    "resume": "Sneha_Agarwal.pdf"
+  }
+}
