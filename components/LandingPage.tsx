@@ -428,55 +428,47 @@ export default function LandingPage({ profile, projects, experience, skills, ach
                                 const formData = new FormData(form);
                                 const name = formData.get('name') as string;
                                 const message = formData.get('message') as string;
-                                const subject = "Portfolio Contact";
-                                const body = `Name: ${name}\n\nMessage:\n${message}`;
-                                window.location.href = `mailto:${profile.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+                                const subject = `Portfolio Contact — ${name}`;
+                                const body = `Hi Sneha,\n\n${message}\n\n— ${name}`;
+
+                                const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(profile.email)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+                                window.open(gmailUrl, '_blank');
                             }}
                         >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-4">
                                 <div className="space-y-1">
-                                    <label htmlFor="name" className="text-xs font-semibold text-gray-400 ml-1">Name</label>
                                     <input
                                         required
                                         type="text"
                                         name="name"
                                         id="name"
-                                        placeholder="Your Name"
+                                        placeholder="Name"
                                         className={`w-full px-4 py-3 rounded-lg ${colors.card} border ${colors.border} text-white text-sm focus:border-[#38BDF8] focus:ring-1 focus:ring-[#38BDF8] outline-none transition-all placeholder:text-gray-600`}
                                     />
                                 </div>
                                 <div className="space-y-1">
-                                    <label htmlFor="email" className="text-xs font-semibold text-gray-400 ml-1">Email</label>
-                                    <input
+                                    <textarea
                                         required
-                                        type="email"
-                                        name="email"
-                                        id="email"
-                                        placeholder="your@email.com"
-                                        className={`w-full px-4 py-3 rounded-lg ${colors.card} border ${colors.border} text-white text-sm focus:border-[#38BDF8] focus:ring-1 focus:ring-[#38BDF8] outline-none transition-all placeholder:text-gray-600`}
-                                    />
+                                        name="message"
+                                        id="message"
+                                        rows={4}
+                                        placeholder="Message"
+                                        className={`w-full px-4 py-3 rounded-lg ${colors.card} border ${colors.border} text-white text-sm focus:border-[#38BDF8] focus:ring-1 focus:ring-[#38BDF8] outline-none transition-all resize-none placeholder:text-gray-600`}
+                                    ></textarea>
                                 </div>
                             </div>
 
-                            <div className="space-y-1">
-                                <label htmlFor="message" className="text-xs font-semibold text-gray-400 ml-1">Message</label>
-                                <textarea
-                                    required
-                                    name="message"
-                                    id="message"
-                                    rows={4}
-                                    placeholder="How can I help you?"
-                                    className={`w-full px-4 py-3 rounded-lg ${colors.card} border ${colors.border} text-white text-sm focus:border-[#38BDF8] focus:ring-1 focus:ring-[#38BDF8] outline-none transition-all resize-none placeholder:text-gray-600`}
-                                ></textarea>
+                            <div className="space-y-3">
+                                <button
+                                    type="submit"
+                                    className="w-full py-3.5 bg-[#38BDF8] text-[#0F1117] font-bold rounded-lg hover:opacity-90 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 text-sm shadow-[0_0_15px_rgba(56,189,248,0.2)]"
+                                >
+                                    Send Message
+                                    <ArrowRight size={16} />
+                                </button>
                             </div>
-
-                            <button
-                                type="submit"
-                                className="w-full py-3.5 bg-[#38BDF8] text-[#0F1117] font-bold rounded-lg hover:opacity-90 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 text-sm shadow-[0_0_15px_rgba(56,189,248,0.2)]"
-                            >
-                                Send Message
-                                <ArrowRight size={16} />
-                            </button>
                         </form>
                     </div>
 
