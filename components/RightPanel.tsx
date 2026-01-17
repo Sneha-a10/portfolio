@@ -1,71 +1,48 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Play, User, FileText, X } from 'lucide-react';
-import { ResumeView } from './ResumeView';
+import { User, X, Maximize2 } from 'lucide-react';
 import { QuickView } from './QuickView';
+import { useEditor } from '../context/EditorContext';
+import Link from 'next/link';
 
 interface RightPanelProps {
     profileData: string;
     fullData?: any;
     isOpen: boolean;
     onClose: () => void;
-    // If we are on mobile we might want to know to render differently? 
-    // But CSS media queries are often better. We'll use CSS to hide/show or overlay.
 }
 
-import { useEditor } from '../context/EditorContext';
-
 export function RightPanel({ profileData, fullData, isOpen, onClose }: RightPanelProps) {
-    const [activeTab, setActiveTab] = useState<'resume' | 'quick'>('quick');
-    const { activeFile } = useEditor(); // Get active file from context
-
-    // On desktop, it's always visible if "isOpen" is passed as true (which it is now)
-    // On mobile, we might still want it hidden?
-    // Since user said "remove scrollbars" and "keep tabs permanent", layout implies fixed.
-    // We'll stick to the "isOpen" check but now we pass true.
-
-    if (!isOpen) return null;
+    const { activeFile } = useEditor();
 
     return (
-        <div className={`
-      w-full h-full bg-[#141414] border-l border-gray-800 flex flex-col
-      shadow-none z-20
-    `}>
-            {/* Header Tabs */}
-            <div className="flex items-center h-9 bg-[#111111] border-b border-gray-800 select-none">
-                <button
-                    onClick={() => setActiveTab('resume')}
-                    className={`
-             flex-1 h-full flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider transition-colors
-             ${activeTab === 'resume' ? 'bg-[#141414] text-white border-b-2 border-b-ide-accent' : 'text-gray-500 hover:text-gray-300'}
-           `}
-                >
-                    <FileText size={14} />
-                    Resume
-                </button>
-                <button
-                    onClick={() => setActiveTab('quick')}
-                    className={`
-             flex-1 h-full flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider transition-colors
-             ${activeTab === 'quick' ? 'bg-[#141414] text-white border-b-2 border-b-green-500' : 'text-gray-500 hover:text-gray-300'}
-           `}
-                >
+        <div className={`h-full flex flex-col border-l border-ide-border bg-ide-bg transition-all duration-300 w-full`}>
+            <div className="relative flex items-center justify-end h-10 bg-ide-sidebar border-b border-ide-border px-4">
+                <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-medium text-ide-text-secondary uppercase tracking-wider flex items-center gap-2 pointer-events-none">
                     <User size={14} />
                     Quick View
-                </button>
-                {/* Close for mobile overlay */}
-                <button
-                    onClick={onClose}
-                    className="lg:hidden w-10 h-full flex items-center justify-center text-gray-500 hover:bg-red-100 hover:text-red-500"
-                >
-                    <X size={18} />
-                </button>
+                </span>
+                <div className="flex items-center gap-2 relative z-10">
+                    <Link
+                        href="/preview"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-500 hover:text-blue-400 transition-colors"
+                        title="Open Full Design"
+                    >
+                        <Maximize2 size={16} />
+                    </Link>
+                    <button
+                        onClick={onClose}
+                        className="lg:hidden text-gray-500 hover:text-red-500 transition-colors"
+                    >
+                        <X size={18} />
+                    </button>
+                </div>
             </div>
 
-            {/* Content Area */}
             <div className="flex-1 overflow-hidden relative">
-                {activeTab === 'resume' ? <ResumeView /> : <QuickView profileData={profileData} fullData={fullData} activeFile={activeFile} />}
+                <QuickView profileData={profileData} fullData={fullData} activeFile={activeFile} />
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import { EditorLayout } from "@/components/EditorLayout";
-import { getFileContent } from "@/lib/files";
+import { getFileContent, getAllFileNames } from "@/lib/files";
 import { parseProfileJson, parseProjectsMd, parseExperienceJson } from "@/lib/parsers";
 
 export default function IDELayout({
@@ -12,6 +12,9 @@ export default function IDELayout({
     const experienceData = getFileContent("experience.json");
     const skillsData = getFileContent("skills.txt");
     const achievementsData = getFileContent("achievements.md");
+
+    // Get all file names dynamically
+    const allFiles = getAllFileNames();
 
     const profile = parseProfileJson(profileData || "");
     const projects = parseProjectsMd(projectsData || "");
@@ -29,6 +32,7 @@ export default function IDELayout({
         <EditorLayout
             profileData={profileData || "{}"}
             fullData={fullData}
+            files={allFiles}
         >
             {children}
         </EditorLayout>

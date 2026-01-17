@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { useEditor, files } from '../context/EditorContext';
+import { useEditor } from '../context/EditorContext';
 import { FileJson, FileText, FileCode, File, ChevronRight, ChevronDown } from 'lucide-react';
 
 const getIcon = (fileName: string) => {
@@ -13,7 +13,7 @@ const getIcon = (fileName: string) => {
 }
 
 export function Sidebar() {
-    const { activeFile, openFile } = useEditor();
+    const { activeFile, openFile, files } = useEditor();
     const [isOpen, setIsOpen] = React.useState(true);
 
     return (

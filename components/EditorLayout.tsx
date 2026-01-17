@@ -6,7 +6,7 @@ import { TabBar } from './TabBar';
 import { EditorProvider } from '../context/EditorContext';
 import { RightPanel } from './RightPanel';
 
-export function EditorLayout({ children, profileData, fullData }: { children: React.ReactNode, profileData: string, fullData?: any }) {
+export function EditorLayout({ children, profileData, fullData, files }: { children: React.ReactNode, profileData: string, fullData?: any, files?: string[] }) {
     // Right panel is permanent on Desktop (lg+), but toggleable on Mobile/Tablet (<lg).
     const [isMobilePanelOpen, setIsMobilePanelOpen] = React.useState(false);
     // Sidebar is permanent on Tablet/Desktop (md+), but toggleable on Mobile (<md).
@@ -62,7 +62,7 @@ export function EditorLayout({ children, profileData, fullData }: { children: Re
     }, [resizingTarget, resize, stopResizing]);
 
     return (
-        <EditorProvider>
+        <EditorProvider initialFiles={files}>
             <div className={`flex h-screen w-full bg-ide-bg text-ide-text-primary overflow-hidden relative ${resizingTarget ? 'cursor-col-resize select-none' : ''}`}>
 
                 {/* Resizable Sidebar Wrapper */}

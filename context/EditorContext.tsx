@@ -6,21 +6,14 @@ import { usePathname, useRouter } from 'next/navigation';
 interface EditorContextType {
     activeFile: string;
     openFiles: string[];
+    files: string[];
     openFile: (fileName: string) => void;
     closeFile: (fileName: string) => void;
 }
 
 const EditorContext = createContext<EditorContextType | undefined>(undefined);
 
-export const files = [
-    "profile.json",
-    "projects.md",
-    "experience.json",
-    "skills.txt",
-    "achievements.md"
-];
-
-export function EditorProvider({ children }: { children: ReactNode }) {
+export function EditorProvider({ children, initialFiles = [] }: { children: ReactNode, initialFiles?: string[] }) {
     const pathname = usePathname();
     const router = useRouter();
 
@@ -28,15 +21,21 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     const [openFiles, setOpenFiles] = useState<string[]>(["profile.json"]);
     const [activeFile, setActiveFile] = useState<string>("profile.json");
 
+    // Use the passed initialFiles, or fallback if empty (though layout should provide them)
+    const availableFiles = initialFiles.length > 0 ? initialFiles : ["profile.json"];
+
     useEffect(() => {
         // Sync active file with URL
-        let currentFile = pathname === '/' ? 'profile.json' : pathname.slice(1);
+        let currentFile = "";
 
-        // Handle case where path is just / or invalid
-        if (pathname === '/') currentFile = 'profile.json';
+        if (pathname === '/' || pathname === '/ide') {
+            currentFile = 'profile.json';
+        } else if (pathname?.startsWith('/ide/')) {
+            currentFile = pathname.replace('/ide/', '');
+        }
 
         // If the file exists in our known files, set it as active
-        if (files.includes(currentFile)) {
+        if (availableFiles.includes(currentFile)) {
             setActiveFile(currentFile);
             setOpenFiles(prev => {
                 if (!prev.includes(currentFile)) {
@@ -45,7 +44,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
                 return prev;
             });
         }
-    }, [pathname]);
+    }, [pathname, availableFiles]);
 
     const openFile = (fileName: string) => {
         setOpenFiles(prev => {
@@ -55,7 +54,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
             return prev;
         });
         setActiveFile(fileName);
-        router.push(fileName === 'profile.json' ? '/' : `/${fileName}`);
+        router.push(`/ide/${fileName}`);
     };
 
     const closeFile = (fileName: string) => {
@@ -80,7 +79,7 @@ export function EditorProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <EditorContext.Provider value={{ activeFile, openFiles, openFile, closeFile }}>
+        <EditorContext.Provider value={{ activeFile, openFiles, files: availableFiles, openFile, closeFile }}>
             {children}
         </EditorContext.Provider>
     );

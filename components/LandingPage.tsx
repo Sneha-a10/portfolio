@@ -384,28 +384,30 @@ export default function LandingPage({ profile, projects, experience, skills, ach
 
                 {/* 7. FOCUS AREAS / ABOUT ME (Moved to bottom) */}
                 {/* 7. FOCUS AREAS (Refactored) */}
-                <section id="about" className={`max-w-6xl mx-auto ${padding}`}>
-                    <div className="mb-12">
-                        <h2 className={`${textSize.sectionTitle} font-bold text-white text-center`}>Focus Areas</h2>
-                    </div>
-                    <div className={`grid ${isQuickView ? 'grid-cols-1' : 'md:grid-cols-3'} gap-6`}>
-                        {profile.focus.slice(0, 3).map((area: any, idx: number) => (
-                            <div key={idx} className={`p-8 rounded-2xl ${colors.card} border ${colors.border} hover:border-[#38BDF8]/50 transition-all group relative overflow-hidden`}>
-                                <div className={`w-12 h-12 rounded-xl bg-[#38BDF8]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                                    {idx === 0 ? <Cpu className={colors.accent} size={24} /> :
-                                        idx === 1 ? <Code2 className={colors.accent} size={24} /> :
-                                            <Terminal className={colors.accent} size={24} />}
+                {profile.focus && profile.focus.length > 0 && (
+                    <section id="about" className={`max-w-6xl mx-auto ${padding}`}>
+                        <div className="mb-12">
+                            <h2 className={`${textSize.sectionTitle} font-bold text-white text-center`}>Focus Areas</h2>
+                        </div>
+                        <div className={`grid ${isQuickView ? 'grid-cols-1' : 'md:grid-cols-3'} gap-6`}>
+                            {profile.focus.slice(0, 3).map((area: any, idx: number) => (
+                                <div key={idx} className={`p-8 rounded-2xl ${colors.card} border ${colors.border} hover:border-[#38BDF8]/50 transition-all group relative overflow-hidden`}>
+                                    <div className={`w-12 h-12 rounded-xl bg-[#38BDF8]/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                                        {idx === 0 ? <Cpu className={colors.accent} size={24} /> :
+                                            idx === 1 ? <Code2 className={colors.accent} size={24} /> :
+                                                <Terminal className={colors.accent} size={24} />}
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#38BDF8] transition-colors">
+                                        {area.title}
+                                    </h3>
+                                    <p className={`${colors.textSecondary} text-sm leading-relaxed`}>
+                                        {area.description}
+                                    </p>
                                 </div>
-                                <h3 className="text-xl font-bold text-white mb-3 group-hover:text-[#38BDF8] transition-colors">
-                                    {area.title}
-                                </h3>
-                                <p className={`${colors.textSecondary} text-sm leading-relaxed`}>
-                                    {area.description}
-                                </p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
+                            ))}
+                        </div>
+                    </section>
+                )}
 
                 {/* 8. CONTACT FORM (New "Let's Connect") */}
                 <section id="contact" className={`max-w-2xl mx-auto ${padding} py-12 md:py-20`}>

@@ -16,17 +16,12 @@ export default async function FilePage({ params }: { params: Promise<{ filename:
 
     if (filename === 'resume.pdf') {
         return (
-            <div className="flex flex-col items-center justify-center h-full text-gray-400 mt-20">
-                <File className="w-16 h-16 mb-4 text-red-400 opacity-50" />
-                <p className="mb-4">PDF Preview not available in this minimal editor.</p>
-                <a
-                    href="/Sneha_Agarwal.pdf"
-                    download
-                    className="bg-ide-accent text-ide-bg px-4 py-2 font-bold hover:opacity-90 transition-opacity"
-                >
-                    Download Resume.pdf
-                </a>
-                {/* In a real app, we would serve static file or use an iframe */}
+            <div className="w-full h-full flex flex-col bg-gray-900">
+                <iframe
+                    src="/Sneha_Agarwal.pdf"
+                    className="w-full h-full border-none"
+                    title="Resume PDF"
+                />
             </div>
         );
     }
