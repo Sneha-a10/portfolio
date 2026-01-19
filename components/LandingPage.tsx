@@ -13,7 +13,10 @@ import {
     ArrowRight,
     Briefcase,
     GraduationCap,
-    MapPin
+    MapPin,
+    Gamepad2,
+    Timer,
+    Sparkles
 } from 'lucide-react';
 
 interface LandingPageProps {
@@ -28,6 +31,9 @@ interface LandingPageProps {
 
 export default function LandingPage({ profile, projects, experience, skills, achievements, activeFile, isQuickView = false }: LandingPageProps) {
     const [showToast, setShowToast] = React.useState(false);
+    // State for Interaction (Tap/Click to expand) - Unified for both mobile and desktop
+    const [activeFunBuild, setActiveFunBuild] = React.useState<number | null>(null);
+    const funBuildsRef = React.useRef<HTMLDivElement>(null);
 
     // Scroll to section on activeFile change
     React.useEffect(() => {
@@ -49,6 +55,18 @@ export default function LandingPage({ profile, projects, experience, skills, ach
             }
         }
     }, [activeFile]);
+
+    // Close fun build popup on click outside (Robust Ref check)
+    React.useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (funBuildsRef.current && !funBuildsRef.current.contains(event.target as Node)) {
+                setActiveFunBuild(null);
+            }
+        };
+        // Use mousedown to catch clicks before they might be handled elsewhere/dragged
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
 
     // --- Helpers & parsers ---
 
@@ -122,6 +140,47 @@ export default function LandingPage({ profile, projects, experience, skills, ach
     };
     const spacing = isQuickView ? 'space-y-12' : 'space-y-24';
     const padding = isQuickView ? 'px-4' : 'px-6';
+
+    const funBuilds = [
+        {
+            id: 0,
+            name: "Nokia Snake Game",
+            icon: (
+                <div className="w-full h-full p-2 flex items-center justify-center rounded-full overflow-hidden">
+                    <img
+                        src="/snake-icon.jpg"
+                        alt="Snake Game"
+                        className="w-full h-full object-cover rounded-full filter brightness-90 group-hover:brightness-110 transition-all duration-300"
+                    />
+                </div>
+            ),
+            desc: "Computer vision-based implementation of the classic game",
+            tech: ["OpenCV", "MediaPipe"],
+            domain: "Computer Vision",
+            link: "https://github.com/Sneha-a10/nokia_snake_game",
+            isPlaceholder: false
+        },
+        {
+            id: 1,
+            name: "Coming Soon",
+            icon: <Timer size={24} />,
+            desc: "Experimental project in development.",
+            tech: ["TBD"],
+            domain: "Future Build",
+            link: null,
+            isPlaceholder: true
+        },
+        {
+            id: 2,
+            name: "Coming Soon",
+            icon: <Sparkles size={24} />,
+            desc: "Ideas brewing for the next experiment.",
+            tech: ["TBD"],
+            domain: "Future Build",
+            link: null,
+            isPlaceholder: true
+        }
+    ];
 
     return (
         <div className={`min-h-screen ${colors.bg} ${colors.text} font-sans selection:bg-[#38BDF8] selection:text-[#0F1117]`}>
@@ -285,6 +344,136 @@ export default function LandingPage({ profile, projects, experience, skills, ach
                     </div>
                 </section>
 
+                {/* 3.5. FUN BUILDS (FIX 1, 2, 3 Implemented + Click Interaction) */}
+                <section id="fun-builds" className={`max-w-5xl mx-auto ${padding}`}>
+                    <div className="flex flex-col md:flex-row items-start md:items-center gap-6 md:gap-12">
+                        {/* Section Header */}
+                        <div className="shrink-0 mb-4 md:mb-0">
+                            <h3 className={`${textSize.cardTitle} font-bold text-white`}>Fun Builds</h3>
+                            <p className={`${colors.textSecondary} text-sm mt-1 font-medium`}>Experimental & Playful</p>
+                        </div>
+
+                        {/* Badges Container */}
+                        <div ref={funBuildsRef} className="flex flex-col md:flex-row items-center gap-10 md:gap-12 w-full md:w-auto">
+                            {funBuilds.map((build) => (
+                                <div
+                                    key={build.id}
+                                    className={`
+                                        group relative flex flex-col items-center w-full md:w-auto
+                                        ${build.isPlaceholder ? 'opacity-50 cursor-default' : 'cursor-pointer'}
+                                    `}
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // prevent immediate close if bubbling
+                                        if (build.isPlaceholder) return;
+                                        // Toggle active state for both Mobile (Inline) and Desktop (Popup)
+                                        setActiveFunBuild(activeFunBuild === build.id ? null : build.id);
+                                    }}
+                                >
+                                    {/* Caption Above (Project Name) */}
+                                    <span className={`
+                                        mb-3 text-xs font-bold tracking-wide transition-colors text-center 
+                                        ${build.isPlaceholder
+                                            ? 'text-gray-600'
+                                            : (activeFunBuild === build.id ? 'text-white scale-105' : 'text-gray-300 group-hover:text-white')
+                                        }
+                                    `}>
+                                        {build.name}
+                                    </span>
+
+                                    {/* Circular Badge */}
+                                    <div className={`
+                                        w-16 h-16 rounded-full ${colors.card} border-2 
+                                        flex items-center justify-center relative z-10 transition-all duration-300
+                                        ${build.isPlaceholder
+                                            ? 'border-dashed border-zinc-800 text-zinc-700'
+                                            : (activeFunBuild === build.id
+                                                ? 'border-[#38BDF8] text-[#38BDF8] shadow-[0_0_20px_rgba(56,189,248,0.25)]'
+                                                : `border-zinc-800 ${colors.textSecondary} group-hover:border-[#38BDF8]/60 group-hover:text-[#38BDF8]`)
+                                        }
+                                    `}>
+                                        {build.icon}
+                                    </div>
+
+                                    {/* Caption Below (Domain) */}
+                                    <span className={`
+                                        mt-3 text-[10px] uppercase tracking-wider font-bold transition-colors 
+                                        ${build.isPlaceholder
+                                            ? 'text-gray-700'
+                                            : (activeFunBuild === build.id ? 'text-gray-300' : 'text-gray-500 group-hover:text-gray-400')
+                                        }
+                                    `}>
+                                        {build.domain}
+                                    </span>
+
+                                    {/* DESKTOP POPUP (Visible only if Active + Desktop size) */}
+                                    {!build.isPlaceholder && (
+                                        <div
+                                            onClick={(e) => e.stopPropagation()} // Clicking inside popup shouldn't close it
+                                            className={`
+                                                hidden md:block absolute bottom-full mb-6 w-60 
+                                                p-4 rounded-xl ${colors.card} border ${colors.border} shadow-2xl
+                                                transition-all duration-300 text-left z-20 cursor-auto
+                                                ${activeFunBuild === build.id
+                                                    ? 'opacity-100 translate-y-0 pointer-events-auto'
+                                                    : 'opacity-0 translate-y-2 pointer-events-none'
+                                                }
+                                            `}
+                                        >
+                                            <div className={`absolute bottom-[-6px] left-1/2 -translate-x-1/2 w-3 h-3 ${colors.card} border-b border-r ${colors.border} rotate-45`}></div>
+                                            <div className="space-y-2 relative z-10">
+                                                <div className="flex items-center justify-between">
+                                                    <h4 className="font-bold text-white text-sm">{build.name}</h4>
+                                                    {build.link && <ExternalLink size={12} className="text-[#38BDF8]" />}
+                                                </div>
+                                                <p className="text-xs text-gray-400 leading-relaxed">
+                                                    {build.desc}
+                                                </p>
+                                                <div className="flex flex-wrap gap-1.5 pt-1">
+                                                    {build.tech.map(t => (
+                                                        <span key={t} className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-[#1F2937] text-gray-300 border border-gray-800">
+                                                            {t}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                {/* Desktop Link Cover */}
+                                                {build.link && (
+                                                    <a href={build.link} target="_blank" rel="noreferrer" className="absolute inset-0 z-20" aria-label={`View ${build.name}`}></a>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* MOBILE EXPANDED CARD (Visible only if Active + Mobile size) */}
+                                    {!build.isPlaceholder && activeFunBuild === build.id && (
+                                        <div
+                                            className="md:hidden mt-4 w-full p-4 rounded-xl bg-[#111111] border border-zinc-800 animate-in fade-in slide-in-from-top-2 duration-200 cursor-auto"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            <div className="space-y-3 text-center">
+                                                <p className="text-sm text-gray-300 leading-relaxed">
+                                                    {build.desc}
+                                                </p>
+                                                <div className="flex flex-wrap justify-center gap-2">
+                                                    {build.tech.map(t => (
+                                                        <span key={t} className="px-2 py-1 rounded text-xs font-medium bg-[#1F2937] text-gray-300 border border-gray-800">
+                                                            {t}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                                {build.link && (
+                                                    <a href={build.link} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs font-bold text-[#38BDF8] hover:underline mt-2">
+                                                        View on GitHub <ExternalLink size={12} />
+                                                    </a>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
                 {/* 4. EXPERIENCE & EDUCATION (Moved after Projects) */}
                 <section id="experience" className={`max-w-6xl mx-auto ${padding}`}>
                     <div className={`grid ${isQuickView ? 'grid-cols-1 gap-8' : 'md:grid-cols-2 gap-12'}`}>
@@ -330,31 +519,28 @@ export default function LandingPage({ profile, projects, experience, skills, ach
                     </div>
                 </section>
 
-                {/* 5. SKILLS COMPACT (Moved after Experience) */}
-                <section id="skills" className={`max-w-4xl mx-auto ${padding}`}>
-                    {/* 5. SKILLS SNAPSHOT (Refactored) */}
-                    <section id="skills" className={`max-w-6xl mx-auto ${padding}`}>
-                        <div className="mb-8 text-center">
-                            <h2 className={`${textSize.sectionTitle} font-bold text-white`}>Skills Snapshot</h2>
-                        </div>
+                {/* 5. SKILLS SNAPSHOT (Refactored) */}
+                <section id="skills" className={`max-w-6xl mx-auto ${padding}`}>
+                    <div className="mb-8 text-center">
+                        <h2 className={`${textSize.sectionTitle} font-bold text-white`}>Skills Snapshot</h2>
+                    </div>
 
-                        <div className={`grid ${isQuickView ? 'grid-cols-1 gap-6' : 'grid-cols-1 md:grid-cols-2 gap-6'}`}>
-                            {Object.entries(parsedSkills).slice(0, 4).map(([category, items]) => (
-                                <div key={category} className={`p-6 rounded-2xl ${colors.card} border ${colors.border} hover:border-[#38BDF8]/30 transition-all group`}>
-                                    <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 group-hover:text-[#38BDF8] transition-colors">
-                                        {category}
-                                    </h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {items.map(skill => (
-                                            <span key={skill} className={`px-2.5 py-1 text-xs font-medium rounded-md bg-[#1F2937]/50 text-gray-300 border border-gray-800 group-hover:border-gray-700 transition-colors`}>
-                                                {skill}
-                                            </span>
-                                        ))}
-                                    </div>
+                    <div className={`grid ${isQuickView ? 'grid-cols-1 gap-6' : 'grid-cols-1 md:grid-cols-2 gap-6'}`}>
+                        {Object.entries(parsedSkills).slice(0, 4).map(([category, items]) => (
+                            <div key={category} className={`p-6 rounded-2xl ${colors.card} border ${colors.border} hover:border-[#38BDF8]/30 transition-all group`}>
+                                <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 mb-4 group-hover:text-[#38BDF8] transition-colors">
+                                    {category}
+                                </h3>
+                                <div className="flex flex-wrap gap-2">
+                                    {items.map(skill => (
+                                        <span key={skill} className={`px-2.5 py-1 text-xs font-medium rounded-md bg-[#1F2937]/50 text-gray-300 border border-gray-800 group-hover:border-gray-700 transition-colors`}>
+                                            {skill}
+                                        </span>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    </section>
+                            </div>
+                        ))}
+                    </div>
                 </section>
 
                 {/* 6. ACHIEVEMENTS (New Section) */}
@@ -382,7 +568,6 @@ export default function LandingPage({ profile, projects, experience, skills, ach
                     </div>
                 </section>
 
-                {/* 7. FOCUS AREAS / ABOUT ME (Moved to bottom) */}
                 {/* 7. FOCUS AREAS (Refactored) */}
                 {profile.focus && profile.focus.length > 0 && (
                     <section id="about" className={`max-w-6xl mx-auto ${padding}`}>

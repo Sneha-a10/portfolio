@@ -7,12 +7,14 @@ import { File } from "lucide-react";
 export async function generateStaticParams() {
     const files = getAllFileNames();
     return files.map((filename) => ({
-        filename,
+        filename: filename.split('/'),
     }));
 }
 
-export default async function FilePage({ params }: { params: Promise<{ filename: string }> }) {
-    const { filename } = await params;
+export default async function FilePage({ params }: { params: Promise<{ filename: string[] }> }) {
+    const { filename: filenameParts } = await params;
+    // Decode each part and join
+    const filename = filenameParts.map(decodeURIComponent).join('/');
 
     if (filename === 'resume.pdf') {
         return (
